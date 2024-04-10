@@ -1,0 +1,6 @@
+1,Moscow
+1,Yugorsk
+2,Ekaterinburg
+3,Kazan
+4,Kursk
+4,Tula

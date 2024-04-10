@@ -1,0 +1,147 @@
+1:
+create table transport(id int,name string);
+insert into transport(id,name) values(1,"KAMAZ");
+insert into transport(id,name) values(2,"LADA");
+insert into transport(id,name) values(3,"FORD");
+insert into transport(id,name) values(4,"TOYOTA");
+
+
+2:
+create table city(id int,town string);
+insert into city(id,town) values(1,"Moscow");
+insert into city(id,town) values(1,"Yugorsk");
+insert into city(id,town) values(2,"Ekaterinburg");
+insert into city(id,town) values(3,"Kazan");
+insert into city(id,town) values(4,"Kursk");
+insert into city(id,town) values(4,"Tula");
+
+3:
+create table color(id int,c string);
+insert into color(id,c) values(1,"Black");
+insert into color(id,c) values(2,"White");
+insert into color(id,c) values(3,"White");
+
+4:
+create table owner(id int,c string);
+insert into owner(id,c) values(1,"Masha");
+insert into owner(id,c) values(2,"Petya");
+insert into owner(id,c) values(3,"Kirill");
+insert into owner(id,c) values(3,"Oleg");
+
+
+JOIN 1:
+select * from transport join owner on transport.id = owner.id
+
+
+
+JOIN 2:
+select * from transport left join color on transport.id = color.id;
+
+JOIN 3:
+select * from transport right join city on transport.id = city.id;
+
+GROUP BY:
+select c,count(c) from color group by c;
+
+WHERE:
+select * from city where town='Tula';
+
+
+Загрузим таблицы в hadoop
+hdfs dfs -put /home/caxapa/inputData/transport.txt /test3/transport
+hdfs dfs -put /home/caxapa/inputData/city.txt /test3/city
+hdfs dfs -put /home/caxapa/inputData/owner.txt /test3/owner
+hdfs dfs -put /home/caxapa/inputData/color.txt /test3/color
+
+
+                HIVE
+
+
+
+                PIG
+1
+-- Загружаем данные таблиц transport и owner
+transport = LOAD '/test3/transport' USING PigStorage(',') AS (id: int, transport_name: chararray);
+owner = LOAD '/test3/owner' USING PigStorage(',') AS (id: int, owner_name: chararray);
+
+-- Выполняем операцию JOIN
+joined_data = JOIN transport BY id, owner BY id;
+
+-- Выбираем только необходимые столбцы
+result = FOREACH joined_data GENERATE transport::id AS transport_id, transport_name, owner::owner_name AS owner_name;
+
+-- Выводим результат на экран
+DUMP result;
+-----------
+(1,KAMAZ,Masha)
+(2,LADA,Petya)
+(3,FORD,Oleg)
+(3,FORD,Kirill)
+
+2
+-- Загружаем данные таблиц transport и color
+transport = LOAD '/test3/transport' USING PigStorage(',') AS (id: int, transport_name: chararray);
+color = LOAD '/test3/color' USING PigStorage(',') AS (id: int, color_name: chararray);
+
+-- Выполняем операцию JOIN
+joined_data = JOIN transport BY id LEFT OUTER, color BY id;
+
+-- Выбираем только необходимые столбцы
+result = FOREACH joined_data GENERATE transport::id AS transport_id, transport_name, color::id AS color_id, color_name;
+
+-- Выводим результат на экран
+DUMP result;
+------------
+(1,KAMAZ,1,Black)
+(2,LADA,2,White)
+(3,FORD,3,White)
+(4,TOYOTA,,)
+
+3
+-- Загружаем данные таблиц transport и city
+transport = LOAD '/test3/transport' USING PigStorage(',') AS (id: int, transport_name: chararray);
+city = LOAD '/test3/city' USING PigStorage(',') AS (id: int, city_name: chararray);
+-- Выполняем операцию JOIN
+joined_data = JOIN transport BY id LEFT OUTER, city BY id;
+-- Выбираем только необходимые столбцы
+result = FOREACH joined_data GENERATE transport::id AS transport_id, transport_name, city::id AS city_id, city_name;
+-- Фильтруем данные, чтобы получить только строки с city.id IS NOT NULL
+filtered_result = FILTER result BY city_id IS NOT NULL;
+-- Выводим результат на экран
+DUMP filtered_result;
+---------
+(1,KAMAZ,1,Yugorsk)
+(1,KAMAZ,1,Moscow)
+(2,LADA,2,Ekaterinburg)
+(3,FORD,3,Kazan)
+(4,TOYOTA,4,Tula)
+(4,TOYOTA,4,Kursk)
+
+4
+-- Загружаем данные из таблицы color
+color_data = LOAD '/test3/color' USING PigStorage(',') AS (id: int, name: chararray);
+
+-- Группируем данные по цвету
+grouped_data = GROUP color_data BY name;
+
+-- Считаем количество строк в каждой группе
+counted_data = FOREACH grouped_data GENERATE group AS color, COUNT(color_data) AS count;
+
+-- Выводим результат на экран
+DUMP counted_data;
+--------------
+(Black,1)
+(White,2)
+
+5
+-- Загружаем данные из таблицы city
+city_data = LOAD '/test3/city' USING PigStorage(',') AS (id: int, town: chararray);
+
+-- Фильтруем данные, чтобы получить только строки, где town равен 'Tula'
+filtered_data = FILTER city_data BY town == 'Tula';
+
+-- Выводим результат на экран
+DUMP filtered_data;
+----------------
+(4,Tula)
+
