@@ -30,8 +30,7 @@ insert into owner(id,c) values(3,"Oleg");
 
 
 JOIN 1:
-select * from transport join owner on transport.id = owner.id
-
+select * from transport join owner on transport.id = owner.id;
 
 
 JOIN 2:
@@ -55,7 +54,50 @@ hdfs dfs -put /home/caxapa/inputData/color.txt /test3/color
 
 
                 HIVE
+1
+select * from transport join owner on transport.id = owner.id
+------------
+| 1             | KAMAZ           | 1         | Masha    |
+| 2             | LADA            | 2         | Petya    |
+| 3             | FORD            | 3         | Kirill   |
+| 3             | FORD            | 3         | Oleg     |
 
+
+
+2
+select * from transport left join color on transport.id = color.id;
+---------------
+| 1             | KAMAZ           | 1         | Black    |
+| 2             | LADA            | 2         | White    |
+| 3             | FORD            | 3         | White    |
+| 4             | TOYOTA          | NULL      | NULL     |
+
+
+
+3
+select * from transport right join city on transport.id = city.id;
+--------------
+| 1             | KAMAZ           | 1        | Moscow        |
+| 1             | KAMAZ           | 1        | Yugorsk       |
+| 2             | LADA            | 2        | Ekaterinburg  |
+| 3             | FORD            | 3        | Kazan         |
+| 4             | TOYOTA          | 4        | Kursk         |
+| 4             | TOYOTA          | 4        | Tula          |
+
+
+
+4
+select c,count(c) from color group by c;
+-------------
+| Black  | 1    |
+| White  | 2    |
+
+
+
+5
+select * from city where town='Tula';
+------------
+| 4        | Tula       |
 
 
                 PIG
