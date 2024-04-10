@@ -1,3 +1,5 @@
+                 HIVE
+
 1:
 create table transport(id int,name string);
 insert into transport(id,name) values(1,"KAMAZ");
@@ -52,8 +54,6 @@ hdfs dfs -put /home/caxapa/inputData/city.txt /test3/city
 hdfs dfs -put /home/caxapa/inputData/owner.txt /test3/owner
 hdfs dfs -put /home/caxapa/inputData/color.txt /test3/color
 
-
-                HIVE
 1
 select * from transport join owner on transport.id = owner.id
 ------------
@@ -98,6 +98,11 @@ select c,count(c) from color group by c;
 select * from city where town='Tula';
 ------------
 | 4        | Tula       |
+
+
+
+
+
 
 
                 PIG
