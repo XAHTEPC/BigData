@@ -1,0 +1,4 @@
+cars.com: ford.com, chevrolet.com, toyota.com | Посредническая оценка: 0.4 | Оценка авторитетности: 0.6
+ford.com: cars.com, chevrolet.com | Посредническая оценка: 0.3 | Оценка авторитетности: 0.7
+chevrolet.com: cars.com, ford.com, toyota.com | Посредническая оценка: 0.5 | Оценка авторитетности: 0.8
+toyota.com: cars.com, chevrolet.com | Посредническая оценка: 0.2 | Оценка авторитетности: 0.5
