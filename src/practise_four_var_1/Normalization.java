@@ -1,4 +1,4 @@
-package practise_four;
+package practise_four_var_1;
 import org.apache.hadoop.io.Text;
 
 import java.io.BufferedWriter;
@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Normalization {
-    public static ArrayList<Text> key;
+    public static ArrayList<String> key;
     public static ArrayList<Double> auth;
     public static ArrayList<Double> score;
     public static ArrayList<String> links;
@@ -19,7 +19,7 @@ public class Normalization {
         score = new ArrayList<>();
         links = new ArrayList<>();
     }
-    public static void addElements(Text key_, double auth_, double score_, String links_){
+    public static void addElements(String key_, double auth_, double score_, String links_){
         key.add(key_);
         auth.add(auth_);
         score.add(score_);

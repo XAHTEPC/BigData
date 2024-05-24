@@ -1,0 +1,4 @@
+cars.com        nodes:ford.com,chevrolet.com,toyota.com,|auth:1.8|hub:0.2
+chevrolet.com   nodes:ford.com,cars.com,toyota.com,|auth:1.4000000000000001|hub:0.6
+ford.com        nodes:cars.com,chevrolet.com,|auth:0.8|hub:0.4
+toyota.com	nodes:cars.com,chevrolet.com,|auth:0.8|hub:0.8

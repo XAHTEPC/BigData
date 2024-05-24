@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact name="BigData:jar3">
+    <output-path>$PROJECT_DIR$/out/artifacts/BigData_jar3</output-path>
+    <root id="root">
+      <element id="archive" name="BigData.jar">
+        <element id="module-output" name="BigData" />
+      </element>
+      <element id="library" level="project" name="apache.hadoop.mapreduce.client.app" />
+      <element id="library" level="project" name="apache.spark.core_2.10" />
+    </root>
+  </artifact>
+</component>

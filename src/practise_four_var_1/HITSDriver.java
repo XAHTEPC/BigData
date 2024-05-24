@@ -1,4 +1,4 @@
-package practise_four;
+package practise_four_var_1;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -17,6 +17,7 @@ public class HITSDriver {
         job.setReducerClass(HITSReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
+        HITSReducer.start();
         FileInputFormat.addInputPath(job,  new Path("/home/caxapa/inputData/inputHITS.txt"));
         FileOutputFormat.setOutputPath(job,  new Path("/home/caxapa/outputDataHITS"));
         job.waitForCompletion(true);
