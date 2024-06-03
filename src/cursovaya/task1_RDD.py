@@ -22,18 +22,3 @@ joined_data = total_messages_per_user.join(filtered_messages_per_user)
 percentage_filtered_messages = joined_data.map(lambda x: (x[0], float_convert(x[1][1]) / float_convert(x[1][0])))
 result = percentage_filtered_messages.filter(lambda x: x[1] >= n)
 result.collect()
-
-m = round(m);
-
-df = spark.read.option("header", False).option("delimeter", '","').csv("/root/ira_tweets_csv_hashed.csv")
-df.createOrReplaceTempView("tweets")
-result_df = spark.sql("""
-    SELECT _c1 AS userid,
-           COUNT(_c1) AS total_messages,
-           SUM(CASE WHEN _c25 >= """+m+""" THEN 1 ELSE 0 END) AS filtered_messages,
-           SUM(CASE WHEN _c25 >= """+m+""" THEN 1 ELSE 0 END) / COUNT(_c1) AS percentage_filtered_messages
-    FROM tweets
-    GROUP BY _c1
-    HAVING percentage_filtered_messages >=
-    """ + n )
-result_df.show()
